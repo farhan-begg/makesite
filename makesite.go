@@ -59,9 +59,12 @@ func writeTemplateToFile(templateName string, data string) {
 
 }
 
+
 func main() {
 	arg := os.Args[1]
 	renderTemplate("template.tmpl", readFile(arg))
 	writeTemplateToFile("template.tmpl", arg)
+	// renderTemplate("template.tmpl", readFile("first-post.txt"))
+
 
 }
