@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"html/template"
 	"io/ioutil"
 	"os"
@@ -29,7 +30,7 @@ func writeFile(name string, data string) {
 }
 
 func renderTemplate(filename string, data string) {
-	
+
 	t := template.Must(template.New("template.tmpl").ParseFiles(filename))
 	var err error
 	err = t.Execute(os.Stdout, content{Content: data})
@@ -43,7 +44,7 @@ func filterInput(input string) string {
 
 }
 
-func writeTemplateToFile(templateName string, data string) {	
+func writeTemplateToFile(templateName string, data string) {
 	t := template.Must(template.New("template.tmpl").ParseFiles(templateName))
 
 	filter := filterInput(data)
@@ -59,12 +60,14 @@ func writeTemplateToFile(templateName string, data string) {
 
 }
 
-
 func main() {
-	arg := os.Args[1]
-	renderTemplate("template.tmpl", readFile(arg))
-	writeTemplateToFile("template.tmpl", arg)
-	// renderTemplate("template.tmpl", readFile("first-post.txt"))
-
-
+	fileParse := flag.String("file", "", "txt file will be converted to html file")
+	flag.Parse()
+	if *fileParse != "" {
+		renderTemplate("template.tmpl", readFile(*fileParse))
+		writeTemplateToFile("template.tmpl", *fileParse)
+	} else {
+		renderTemplate("template.tmpl", readFile("first-post.txt"))
+		writeTemplateToFile("template.tmpl", "test3.html")
+	}
 }
