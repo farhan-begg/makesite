@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	// "fmt"
 	"html/template"
 	"io/ioutil"
 	"os"
 	"strings"
-	"github.com/fatih/color"
+	// "github.com/fatih/color"
 
 )
 
@@ -74,40 +74,69 @@ func isTxtFile(filename string) bool {
 
 
 
-func main() {
+// func main() {
 
-	filePtr := flag.String("file", "", "name of txt file to be converted to html file")
-	dirPtr := flag.String("dir", "", "name of directory to search")
+// 	filePtr := flag.String("file", "", "name of txt file to be converted to html file")
+// 	dirPtr := flag.String("dir", "", "name of directory to search")
 	
+// 	flag.Parse()
+// 	if *dirPtr != "" {
+// 		files, err := ioutil.ReadDir(*dirPtr)
+// 		if err != nil{
+// 			panic(err)
+// 		}
+
+// 		for _, file := range files {
+// 			name := file.Name()
+// 			if isTxtFile(name) == true {
+// 				renderTemplate("template.tmpl", readFile(name))
+// 				writeTemplateToFile("template.tmpl", name)
+// 				fmt.Println(file.Name())
+
+// 				minion := color.New(color.FgBlack).Add(color.BgYellow).Add(color.Bold)
+// 				minion.Println("Minion says: banana!!!!!!")
+			 
+// 				m := minion.PrintlnFunc()
+// 				m("I want another banana!!!!!")
+			 
+// 				slantedRed := color.New(color.FgRed, color.BgWhite, color.Italic).SprintFunc()
+// 				fmt.Println("I've made a huge", slantedRed("mistake"))
+		
+// 			}
+// 		}
+// 	}
+
+// 	if *filePtr != "" {
+// 		renderTemplate("template.tmpl", readFile(*filePtr))
+// 		writeTemplateToFile("template.tmpl", *filePtr)
+// 	}
+// }
+
+func main() {
+	fileParse := flag.String("file", "", "txt file will be converted to html file")
+	directory := flag.String("dir", "", "search files in this directory")
 	flag.Parse()
-	if *dirPtr != "" {
-		files, err := ioutil.ReadDir(*dirPtr)
-		if err != nil{
+	if *directory != "" {
+		textFiles, err := ioutil.ReadDir(*directory)
+		if err != nil {
 			panic(err)
 		}
-
-		for _, file := range files {
-			name := file.Name()
-			if isTxtFile(name) == true {
-				renderTemplate("template.tmpl", readFile(name))
-				writeTemplateToFile("template.tmpl", name)
-				fmt.Println(file.Name())
-
-				minion := color.New(color.FgBlack).Add(color.BgYellow).Add(color.Bold)
-				minion.Println("Minion says: banana!!!!!!")
-			 
-				m := minion.PrintlnFunc()
-				m("I want another banana!!!!!")
-			 
-				slantedRed := color.New(color.FgRed, color.BgWhite, color.Italic).SprintFunc()
-				fmt.Println("I've made a huge", slantedRed("mistake"))
-		
+		var numFiles int
+		for _, file := range textFiles {
+			filename := file.Name()
+			if isTxtFile(filename) == true {
+				renderTemplate("template.tmpl", readFile(filename))
+				writeTemplateToFile("template.tmpl", filename)
+				numFiles++
 			}
 		}
 	}
 
-	if *filePtr != "" {
-		renderTemplate("template.tmpl", readFile(*filePtr))
-		writeTemplateToFile("template.tmpl", *filePtr)
+	if *fileParse != "" {
+		renderTemplate("template.tmpl", readFile(*fileParse))
+		writeTemplateToFile("template.tmpl", *fileParse)
+	} else {
+		renderTemplate("template.tmpl", readFile("first-post.txt"))
+		writeTemplateToFile("template.tmpl", "test.txt")
 	}
 }
